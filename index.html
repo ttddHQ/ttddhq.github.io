@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ttddHQ — To Think, 2 Do</title>
+<meta name="description" content="ttddHQ — To Think, 2 Do. A place for things made from scratch. Ideas, turned into things that run.">
+<meta name="theme-color" content="#08131F">
+<meta name="color-scheme" content="dark">
+<link rel="canonical" href="https://ttdd.uno/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ttdd.uno/">
+<meta property="og:title" content="ttddHQ — To Think, 2 Do">
+<meta property="og:description" content="A place for things made from scratch. Ideas, turned into things that run.">
+<meta property="og:image" content="https://ttdd.uno/ttdd-avatar-512.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ttddHQ — To Think, 2 Do">
+<meta name="twitter:description" content="A place for things made from scratch. Ideas, turned into things that run.">
+<meta name="twitter:image" content="https://ttdd.uno/ttdd-avatar-512.png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  :root{
+    --bg:#08131F; --grid:#0F2233; --ink:#E8F4F8; --muted:#8499A8;
+    --dim:#3D5A6B; --line:#16293A; --cyan:#22D3EE;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  html{ background:var(--bg); }
+  body{
+    font-family:var(--mono); color:var(--ink); line-height:1.6;
+    min-height:100vh; display:flex; flex-direction:column; position:relative;
+    background-color:var(--bg);
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:64px 64px; background-position:center;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--cyan); color:var(--bg); }
+  a{ text-decoration:none; }
+
+  /* overlays */
+  .vignette,.glow{ position:fixed; inset:0; pointer-events:none; z-index:0; }
+  .vignette{ background:radial-gradient(ellipse at center, transparent 0%, var(--bg) 78%); }
+  .glow{ background:radial-gradient(560px 380px at 50% 8%, rgba(34,211,238,0.08), transparent 70%); }
+
+  /* stage */
+  main{
+    position:relative; z-index:1; flex:1; width:100%; max-width:760px; margin:0 auto;
+    padding:clamp(2rem,6vw,5rem) clamp(1.5rem,5vw,2rem);
+    display:flex; flex-direction:column; align-items:center; text-align:center; justify-content:center;
+  }
+
+  .lockup{
+    font-family:'JetBrains Mono',monospace; font-weight:700;
+    font-size:clamp(2.6rem,9vw,4.4rem); letter-spacing:-.02em; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .lockup .ttdd{ color:var(--ink); }
+  .lockup .hq{ color:var(--dim); }
+  .caret{
+    display:inline-block; width:.38em; height:.92em; background:var(--cyan);
+    border-radius:2px; margin-left:.16em; transform:translateY(.04em);
+    box-shadow:0 0 14px rgba(34,211,238,0.5);
+    transition:opacity .12s ease;
+  }
+  .caret.blink{ animation:blink 1.15s ease-in-out infinite; }
+  @keyframes blink{ 0%,100%{opacity:1} 50%{opacity:0} }
+  @media (prefers-reduced-motion: reduce){
+    .caret.blink, footer .dot{ animation:none; }
+    .tag{ transition:none; }
+  }
+
+  .tagline{
+    font-family:var(--mono); font-weight:500; font-size:clamp(.9rem,2.6vw,1.05rem);
+    color:#B8C9D4; margin-top:1.15rem; letter-spacing:.04em;
+  }
+  .tagline .comma{ color:#1E4A52; margin:0 .15rem; }
+  .key{
+    display:inline-flex; align-items:center; justify-content:center;
+    min-width:1.3em; height:1.3em; padding:0 .2em; background:var(--cyan); color:var(--bg);
+    font-weight:700; border-radius:5px; box-shadow:0 2px 12px rgba(34,211,238,0.45);
+    transform:translateY(-.06em);
+  }
+
+  .pipeline{
+    font-family:var(--mono); font-size:clamp(.75rem,2.2vw,.85rem); letter-spacing:.05em;
+    margin-top:clamp(2.4rem,7vh,3.4rem); padding-top:clamp(2.4rem,7vh,3.4rem);
+    color:var(--dim);
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:center;
+    gap:.55rem .9rem; width:100%; max-width:46ch;
+  }
+  /* a light, flowing line of steps — kept boxless to contrast with the tag chips below */
+  .pipeline .step{
+    color:var(--muted); transition:color .25s, text-shadow .25s;
+  }
+  .pipeline .step:hover{
+    color:var(--cyan); text-shadow:0 0 16px rgba(34,211,238,0.4);
+  }
+  .pipeline .arrow{ color:var(--cyan); opacity:.5; font-weight:700; }
+  .pipeline .loop{ color:var(--cyan); }
+  .pipeline .step:hover .loop{ color:inherit; }
+
+  .about{ margin-top:clamp(2.4rem,7vh,3.4rem); max-width:46ch; text-align:left; }
+  /* terminal-style comment lines, on-brand with the mono theme */
+  .about p{
+    font-family:var(--mono); font-size:.9rem;
+    color:var(--muted); letter-spacing:.01em;
+  }
+  .about p:first-child{ font-weight:500; color:#D6E2EA; }
+  .about p::before{ content:"// "; color:var(--cyan); opacity:.6; }
+  .about p+p{ margin-top:.5rem; }
+
+  /* four core project categories */
+  .tags{ margin-top:clamp(2rem,6vh,2.8rem); display:flex; flex-wrap:wrap; justify-content:center; gap:.6rem; }
+  .tag{
+    display:inline-flex; align-items:center; gap:.32em;
+    font-family:var(--mono); font-weight:500; font-size:.8rem; letter-spacing:.02em;
+    color:#9FB6C4; background:#0E1D2B; border:1px solid var(--line);
+    padding:.46rem .9rem; border-radius:4px; cursor:default;
+    transition:border-color .25s, color .25s, background .25s, box-shadow .25s, transform .25s;
+  }
+  .tag::before{ content:"#"; color:var(--cyan); opacity:.7; font-weight:700; }
+  .tag:hover{
+    border-color:var(--cyan); color:var(--cyan); background:rgba(34,211,238,0.07);
+    box-shadow:0 4px 16px rgba(34,211,238,0.15); transform:translateY(-2px);
+  }
+  .tag:hover::before{ opacity:1; }
+
+  footer{
+    position:relative; z-index:1; width:100%; max-width:760px; margin:0 auto;
+    padding:clamp(1.5rem,4vw,2rem) clamp(1.5rem,5vw,2rem); border-top:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace; font-size:.7rem; letter-spacing:.03em; color:#5C7080;
+    display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;
+  }
+  footer .right{ display:flex; align-items:center; gap:1rem; }
+  footer .status{ display:flex; align-items:center; gap:.45rem; color:#5C7080; font-weight:500; }
+  footer .dot{
+    width:6px; height:6px; border-radius:50%; background:var(--cyan);
+    animation:pulse 2.4s ease-out infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(34,211,238,0.5); }
+    70%{ box-shadow:0 0 0 6px rgba(34,211,238,0); }
+    100%{ box-shadow:0 0 0 0 rgba(34,211,238,0); }
+  }
+  footer a{ color:var(--muted); transition:color .2s; }
+  footer a:hover{ color:var(--cyan); }
+</style>
+</head>
+<body>
+  <div class="vignette"></div>
+  <div class="glow"></div>
+
+  <main>
+    <h1 class="lockup">
+      <span class="ttdd">ttdd</span><span class="hq" id="hq"></span><span class="caret blink" id="caret"></span>
+    </h1>
+    <p class="tagline">To Think<span class="comma">,</span> <span class="key">To</span> Do</p>
+
+    <div class="pipeline">
+      <span class="step">think</span><span class="arrow">&rarr;</span>
+      <span class="step">do</span><span class="arrow">&rarr;</span>
+      <span class="step">ship</span><span class="arrow">&rarr;</span>
+      <span class="step">repeat <span class="loop">&#8635;</span></span>
+    </div>
+
+    <div class="about">
+      <p>A place for things made from scratch.</p>
+      <p>Ideas, turned into things that run.</p>
+    </div>
+
+    <div class="tags">
+      <span class="tag">infrastructure</span>
+      <span class="tag">self-hosting</span>
+      <span class="tag">networking</span>
+      <span class="tag">automation</span>
+    </div>
+  </main>
+
+  <footer>
+    <span>Think it through, then make it work.</span>
+    <span class="right">
+      <span class="status"><span class="dot"></span>building</span>
+      <a href="https://github.com/ttddHQ" target="_blank" rel="noopener">GitHub.com/ttddHQ</a>
+    </span>
+  </footer>
+
+  <script>
+    // HQ typing loop: type "HQ" → hold → backspace → wait 4s → repeat
+    (function () {
+      var el = document.getElementById('hq');
+      var caret = document.getElementById('caret');
+      if (!el) return;
+
+      // Respect users who prefer reduced motion: show "HQ" statically, no loop.
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        el.textContent = 'HQ';
+        return;
+      }
+
+      var full = 'HQ', i = 0, mode = 'typing', timer = null;
+      // Slight random jitter makes the rhythm feel human instead of mechanical.
+      function rand(base, jitter) { return base + Math.random() * jitter; }
+      function schedule(delay) { timer = setTimeout(tick, delay); }
+      // Caret stays solid while actively typing/deleting, blinks only when idle.
+      function setIdle(idle) { if (caret) caret.classList.toggle('blink', idle); }
+
+      function tick() {
+        if (mode === 'typing') {
+          setIdle(false);
+          i++; el.textContent = full.slice(0, i);
+          if (i >= full.length) { mode = 'holding'; setIdle(true); schedule(1700); }
+          else schedule(rand(150, 130));
+        } else if (mode === 'holding') {
+          mode = 'deleting'; schedule(rand(260, 120));
+        } else if (mode === 'deleting') {
+          setIdle(false);
+          i--; el.textContent = full.slice(0, Math.max(0, i));
+          if (i <= 0) { mode = 'waiting'; setIdle(true); schedule(4000); }
+          else schedule(rand(95, 90));
+        } else { mode = 'typing'; i = 0; schedule(rand(90, 60)); }
+      }
+
+      // Pause the loop while the tab is hidden to save battery; resume on return.
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) { clearTimeout(timer); }
+        else { schedule(220); }
+      });
+
+      schedule(700);
+    })();
+  </script>
+</body>
+</html>
